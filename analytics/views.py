@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from transactions.models import Transaction
 from datetime import datetime
+from core.utils import success_response, error_response
 
 
 class MonthlySummaryView(APIView):
@@ -30,13 +31,25 @@ class MonthlySummaryView(APIView):
 
         savings = income - expense
 
-        return Response({
-            "year": year,
-            "month": month,
-            "income": income,
-            "expense": expense,
-            "savings": savings
-        })
+        return success_response(
+            data={
+                "year": year,
+                "month": month,
+                "income": income,
+                "expense": expense,
+                "savings": savings
+            },
+            message="Monthly summary fetched successfully"
+        )
+
+
+        #     return Response({
+        #     "year": year,
+        #     "month": month,
+        #     "income": income,
+        #     "expense": expense,
+        #     "savings": savings
+        # })
 class IncomeExpenseView(APIView):
     permission_classes = [IsAuthenticated]
 

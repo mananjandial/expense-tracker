@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Dashboard</h2>
+
+<div class="row mt-4">
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>Income</h5>
+            <h3 id="income">₹0</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>Expense</h5>
+            <h3 id="expense">₹0</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>Savings</h5>
+            <h3 id="savings">₹0</h3>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<h4>Add Transaction</h4>
+
+<form id="transaction-form">
+    <input type="number" name="amount" placeholder="Amount" class="form-control mb-2">
+    <select name="type" class="form-control mb-2">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+    </select>
+    <input type="text" name="category" placeholder="Category" class="form-control mb-2">
+    <input type="date" name="date" class="form-control mb-2">
+    <button class="btn btn-primary">Add</button>
+</form>
+
+<script>
+    const token = localStorage.getItem("access");
+
+    async function loadSummary() {
+        const res = await fetch("/api/analytics/monthly-summary/", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        const data = await res.json();
+
+        document.getElementById("income").innerText = "₹" + data.data.income;
+        document.getElementById("expense").innerText = "₹" + data.data.expense;
+        document.getElementById("savings").innerText = "₹" + data.data.savings;
+    }
+
+    loadSummary();
+</script>
+
+{% endblock %}

@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Sum
 from transactions.models import Transaction
+from core.utils import success_response, error_response
 
 
 class BudgetViewSet(ModelViewSet):
@@ -49,11 +50,21 @@ class BudgetStatusView(APIView):
         remaining = budget.amount - spent
         percentage_used = (spent / budget.amount) * 100 if budget.amount > 0 else 0
 
-        return Response({
-            "budget": budget.amount,
-            "spent": spent,
-            "remaining": remaining,
-            "percentage_used": round(percentage_used, 2)
-        })
+        # return Response({
+        #     "budget": budget.amount,
+        #     "spent": spent,
+        #     "remaining": remaining,
+        #     "percentage_used": round(percentage_used, 2)
+        # })
+        return success_response(
+            data={
+                "budget": budget.amount,
+                "spent": spent,
+                "remaining": remaining,
+                "percentage_used": round(percentage_used, 2)
+            },
+            message="Budget status fetched successfully"
+        )
+
 
 # Create your views here.
